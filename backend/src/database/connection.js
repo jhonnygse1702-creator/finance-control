@@ -6,6 +6,8 @@ const databasePath = path.join(
     "../../../database/financecontrol.db"
 );
 
+console.log("Banco utilizado:", databasePath);
+
 const db = new Database(databasePath);
 
 db.pragma("foreign_keys = ON");
