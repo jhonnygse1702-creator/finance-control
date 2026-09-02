@@ -1,0 +1,23 @@
+{
+  "name": "finance-control-backend",
+  "version": "1.0.0",
+  "description": "API REST para controle financeiro pessoal",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "jest"
+  },
+  "keywords": [
+    "javascript",
+    "nodejs",
+    "express",
+    "finance",
+    "api"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
