@@ -1,5 +1,7 @@
 const express = require("express");
 
+const path = require("path");
+
 const categoryRoutes = require("./routes/categoryRoutes");
 const errorHandler = require("./middlewares/errorHandler");
 
@@ -7,11 +9,7 @@ const app = express();
 
 app.use(express.json());
 
-app.get("/", (req, res) => {
-    res.json({
-        message: "FinanceControl API funcionando!"
-    });
-});
+app.use(express.static(path.join(__dirname, "../../frontend")));
 
 app.use("/api/categories", categoryRoutes);
 
