@@ -74,7 +74,24 @@ function deleteCategory(id) {
         throw error;
     }
 
-    categoryRepository.remove(id);
+    try {
+        categoryRepository.remove(id);
+    } catch (error) {
+        if (
+            error.code === "SQLITE_CONSTRAINT_FOREIGNKEY" ||
+            error.code === "SQLITE_CONSTRAINT_TRIGGER"
+        ) {
+            const customError = new Error(
+                "Não é possível excluir esta categoria porque ela possui transações vinculadas."
+            );
+
+            customError.statusCode = 400;
+
+            throw customError;
+        }
+
+        throw error;
+    }
 
     return {
         message: "Categoria excluída com sucesso."
@@ -86,5 +103,6 @@ module.exports = {
     getCategoryById,
     updateCategory,
     createCategory,
+    updateCategory,
     deleteCategory
 };

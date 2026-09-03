@@ -1,6 +1,16 @@
 const dashboardRepository = require("../repositories/dashboardRepository");
 
-function getFinancialSummary(month) {
+function getFinancialSummary(userId, month) {
+    if (!userId) {
+        const error = new Error(
+            "O usuário é obrigatório."
+        );
+
+        error.statusCode = 400;
+
+        throw error;
+    }
+
     if (!month) {
         const error = new Error(
             "O mês é obrigatório. Informe no formato YYYY-MM."
@@ -21,12 +31,20 @@ function getFinancialSummary(month) {
         throw error;
     }
 
-    const summary = dashboardRepository.getSummary(month);
+    const summary =
+        dashboardRepository.getSummary(
+            userId,
+            month
+        );
 
-    const totalIncome = Number(summary.total_income);
-    const totalExpense = Number(summary.total_expense);
+    const totalIncome =
+        Number(summary.total_income);
 
-    const balance = totalIncome - totalExpense;
+    const totalExpense =
+        Number(summary.total_expense);
+
+    const balance =
+        totalIncome - totalExpense;
 
     return {
         month,

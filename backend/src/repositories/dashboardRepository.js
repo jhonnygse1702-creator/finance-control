@@ -1,6 +1,6 @@
 const db = require("../database/connection");
 
-function getSummary(month) {
+function getSummary(userId, month) {
     return db
         .prepare(`
             SELECT
@@ -26,10 +26,12 @@ function getSummary(month) {
 
             FROM transactions
 
-            WHERE transaction_date >= ?
+            WHERE user_id = ?
+              AND transaction_date >= ?
               AND transaction_date < date(?, '+1 month')
         `)
         .get(
+            userId,
             `${month}-01`,
             `${month}-01`
         );

@@ -1,6 +1,32 @@
 const transactionRepository = require("../repositories/transactionRepository");
 const categoryRepository = require("../repositories/categoryRepository");
 
+function isValidDate(dateString) {
+    if (
+        typeof dateString !== "string" ||
+        !/^\d{4}-\d{2}-\d{2}$/.test(dateString)
+    ) {
+        return false;
+    }
+
+    const [year, month, day] =
+        dateString.split("-").map(Number);
+
+    const date = new Date(
+        Date.UTC(
+            year,
+            month - 1,
+            day
+        )
+    );
+
+    return (
+        date.getUTCFullYear() === year &&
+        date.getUTCMonth() === month - 1 &&
+        date.getUTCDate() === day
+    );
+}
+
 function validateTransactionData(
     categoryId,
     description,
@@ -14,13 +40,21 @@ function validateTransactionData(
         throw error;
     }
 
-    if (!description || typeof description !== "string" || description.trim() === "") {
+    if (
+        !description ||
+        typeof description !== "string" ||
+        description.trim() === ""
+    ) {
         const error = new Error("A descrição é obrigatória.");
         error.statusCode = 400;
         throw error;
     }
 
-    if (amount === undefined || amount === null || amount === "") {
+    if (
+        amount === undefined ||
+        amount === null ||
+        amount === ""
+    ) {
         const error = new Error("O valor é obrigatório.");
         error.statusCode = 400;
         throw error;
@@ -28,28 +62,59 @@ function validateTransactionData(
 
     const numericAmount = Number(amount);
 
-    if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
-        const error = new Error("O valor deve ser maior que zero.");
+    if (
+        !Number.isFinite(numericAmount) ||
+        numericAmount <= 0
+    ) {
+        const error = new Error(
+            "O valor deve ser maior que zero."
+        );
+
         error.statusCode = 400;
         throw error;
     }
 
-    if (!type || !["income", "expense"].includes(type)) {
-        const error = new Error("O tipo deve ser 'income' ou 'expense'.");
+    if (
+        !type ||
+        !["income", "expense"].includes(type)
+    ) {
+        const error = new Error(
+            "O tipo deve ser 'income' ou 'expense'."
+        );
+
         error.statusCode = 400;
         throw error;
     }
 
-    if (!transactionDate || typeof transactionDate !== "string") {
-        const error = new Error("A data da transação é obrigatória.");
+    if (
+        !transactionDate ||
+        typeof transactionDate !== "string"
+    ) {
+        const error = new Error(
+            "A data da transação é obrigatória."
+        );
+
         error.statusCode = 400;
         throw error;
     }
 
-    const category = categoryRepository.findById(categoryId);
+    if (!isValidDate(transactionDate)) {
+        const error = new Error(
+            "A data da transação é inválida. Use o formato YYYY-MM-DD."
+        );
+
+        error.statusCode = 400;
+        throw error;
+    }
+
+    const category =
+        categoryRepository.findById(categoryId);
 
     if (!category) {
-        const error = new Error("Categoria não encontrada.");
+        const error = new Error(
+            "Categoria não encontrada."
+        );
+
         error.statusCode = 404;
         throw error;
     }
@@ -73,15 +138,40 @@ function validateTransactionData(
     };
 }
 
-function getAllTransactions() {
-    return transactionRepository.findAll();
+function getAllTransactions(userId) {
+    if (!userId) {
+        const error = new Error(
+            "O usuário é obrigatório."
+        );
+
+        error.statusCode = 400;
+        throw error;
+    }
+
+    return transactionRepository.findAll(userId);
 }
 
-function getTransactionById(id) {
-    const transaction = transactionRepository.findById(id);
+function getTransactionById(id, userId) {
+    if (!userId) {
+        const error = new Error(
+            "O usuário é obrigatório."
+        );
+
+        error.statusCode = 400;
+        throw error;
+    }
+
+    const transaction =
+        transactionRepository.findById(
+            id,
+            userId
+        );
 
     if (!transaction) {
-        const error = new Error("Transação não encontrada.");
+        const error = new Error(
+            "Transação não encontrada."
+        );
+
         error.statusCode = 404;
         throw error;
     }
@@ -99,20 +189,85 @@ function createTransaction(
     notes
 ) {
     if (!userId) {
-        const error = new Error("O usuário é obrigatório.");
+        const error = new Error(
+            "O usuário é obrigatório."
+        );
+
         error.statusCode = 400;
         throw error;
     }
 
-    const validatedData = validateTransactionData(
-        categoryId,
-        description,
-        amount,
-        type,
-        transactionDate
-    );
+    const validatedData =
+        validateTransactionData(
+            categoryId,
+            description,
+            amount,
+            type,
+            transactionDate
+        );
 
-    const result = transactionRepository.create(
+    const result =
+        transactionRepository.create(
+            userId,
+            validatedData.categoryId,
+            validatedData.description,
+            validatedData.amount,
+            validatedData.type,
+            validatedData.transactionDate,
+            notes
+        );
+
+    return transactionRepository.findById(
+        result.id,
+        userId
+    );
+}
+
+function updateTransaction(
+    id,
+    userId,
+    categoryId,
+    description,
+    amount,
+    type,
+    transactionDate,
+    notes
+) {
+    if (!userId) {
+        const error = new Error(
+            "O usuário é obrigatório."
+        );
+
+        error.statusCode = 400;
+        throw error;
+    }
+
+    const transaction =
+        transactionRepository.findById(
+            id,
+            userId
+        );
+
+    if (!transaction) {
+        const error = new Error(
+            "Transação não encontrada."
+        );
+
+        error.statusCode = 404;
+        throw error;
+    }
+
+    const validatedData =
+        validateTransactionData(
+            categoryId,
+            description,
+            amount,
+            type,
+            transactionDate
+        );
+
+    transactionRepository.update(
+        id,
         userId,
         validatedData.categoryId,
         validatedData.description,
@@ -122,57 +277,41 @@ function createTransaction(
         notes
     );
 
-    return transactionRepository.findById(result.id);
-}
-
-function updateTransaction(
-    id,
-    categoryId,
-    description,
-    amount,
-    type,
-    transactionDate,
-    notes
-) {
-    const transaction = transactionRepository.findById(id);
-
-    if (!transaction) {
-        const error = new Error("Transação não encontrada.");
-        error.statusCode = 404;
-        throw error;
-    }
-
-    const validatedData = validateTransactionData(
-        categoryId,
-        description,
-        amount,
-        type,
-        transactionDate
-    );
-
-    transactionRepository.update(
+    return transactionRepository.findById(
         id,
-        validatedData.categoryId,
-        validatedData.description,
-        validatedData.amount,
-        validatedData.type,
-        validatedData.transactionDate,
-        notes
+        userId
     );
-
-    return transactionRepository.findById(id);
 }
 
-function deleteTransaction(id) {
-    const transaction = transactionRepository.findById(id);
+function deleteTransaction(id, userId) {
+    if (!userId) {
+        const error = new Error(
+            "O usuário é obrigatório."
+        );
+
+        error.statusCode = 400;
+        throw error;
+    }
+
+    const transaction =
+        transactionRepository.findById(
+            id,
+            userId
+        );
 
     if (!transaction) {
-        const error = new Error("Transação não encontrada.");
+        const error = new Error(
+            "Transação não encontrada."
+        );
+
         error.statusCode = 404;
         throw error;
     }
 
-    transactionRepository.remove(id);
+    transactionRepository.remove(
+        id,
+        userId
+    );
 
     return {
         message: "Transação excluída com sucesso."

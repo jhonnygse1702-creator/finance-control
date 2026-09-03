@@ -1,7 +1,10 @@
 const transactionService = require("../services/transactionService");
 
 function getAllTransactions(req, res) {
-    const transactions = transactionService.getAllTransactions();
+    const userId = req.user.id;
+
+    const transactions =
+        transactionService.getAllTransactions(userId);
 
     res.json(transactions);
 }
@@ -9,14 +12,19 @@ function getAllTransactions(req, res) {
 function getTransactionById(req, res) {
     const { id } = req.params;
 
-    const transaction = transactionService.getTransactionById(id);
+    const userId = req.user.id;
+
+    const transaction =
+        transactionService.getTransactionById(
+            id,
+            userId
+        );
 
     res.json(transaction);
 }
 
 function createTransaction(req, res) {
     const {
-        userId,
         categoryId,
         description,
         amount,
@@ -25,15 +33,18 @@ function createTransaction(req, res) {
         notes
     } = req.body;
 
-    const transaction = transactionService.createTransaction(
-        userId,
-        categoryId,
-        description,
-        amount,
-        type,
-        transactionDate,
-        notes
-    );
+    const userId = req.user.id;
+
+    const transaction =
+        transactionService.createTransaction(
+            userId,
+            categoryId,
+            description,
+            amount,
+            type,
+            transactionDate,
+            notes
+        );
 
     res.status(201).json(transaction);
 }
@@ -50,15 +61,19 @@ function updateTransaction(req, res) {
         notes
     } = req.body;
 
-    const transaction = transactionService.updateTransaction(
-        id,
-        categoryId,
-        description,
-        amount,
-        type,
-        transactionDate,
-        notes
-    );
+    const userId = req.user.id;
+
+    const transaction =
+        transactionService.updateTransaction(
+            id,
+            userId,
+            categoryId,
+            description,
+            amount,
+            type,
+            transactionDate,
+            notes
+        );
 
     res.json(transaction);
 }
@@ -66,7 +81,13 @@ function updateTransaction(req, res) {
 function deleteTransaction(req, res) {
     const { id } = req.params;
 
-    const result = transactionService.deleteTransaction(id);
+    const userId = req.user.id;
+
+    const result =
+        transactionService.deleteTransaction(
+            id,
+            userId
+        );
 
     res.json(result);
 }

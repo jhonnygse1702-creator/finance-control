@@ -1,6 +1,6 @@
 const db = require("../database/connection");
 
-function findAll() {
+function findAll(userId) {
     return db
         .prepare(`
             SELECT
@@ -18,12 +18,13 @@ function findAll() {
             FROM transactions
             INNER JOIN categories
                 ON categories.id = transactions.category_id
+            WHERE transactions.user_id = ?
             ORDER BY transactions.transaction_date DESC, transactions.id DESC
         `)
-        .all();
+        .all(userId);
 }
 
-function findById(id) {
+function findById(id, userId) {
     return db
         .prepare(`
             SELECT
@@ -42,8 +43,9 @@ function findById(id) {
             INNER JOIN categories
                 ON categories.id = transactions.category_id
             WHERE transactions.id = ?
+              AND transactions.user_id = ?
         `)
-        .get(id);
+        .get(id, userId);
 }
 
 function create(
@@ -85,6 +87,7 @@ function create(
 
 function update(
     id,
+    userId,
     categoryId,
     description,
     amount,
@@ -103,6 +106,7 @@ function update(
             notes = ?,
             updated_at = CURRENT_TIMESTAMP
         WHERE id = ?
+          AND user_id = ?
     `);
 
     return statement.run(
@@ -112,17 +116,22 @@ function update(
         type,
         transactionDate,
         notes || null,
-        id
+        id,
+        userId
     );
 }
 
-function remove(id) {
+function remove(id, userId) {
     const statement = db.prepare(`
         DELETE FROM transactions
         WHERE id = ?
+          AND user_id = ?
     `);
 
-    return statement.run(id);
+    return statement.run(
+        id,
+        userId
+    );
 }
 
 module.exports = {
