@@ -6,24 +6,30 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f6f8;
-    color: #222;
+    background-color: #f3f4f6;
+    color: #1f2937;
 }
 
+/* CABEÇALHO */
+
 header {
-    background-color: #1f2937;
+    background-color: #111827;
     color: white;
-    padding: 30px;
+    padding: 35px 20px;
     text-align: center;
 }
 
 header h1 {
+    font-size: 32px;
     margin-bottom: 8px;
 }
 
 header p {
     color: #d1d5db;
+    font-size: 16px;
 }
+
+/* CONTEÚDO PRINCIPAL */
 
 main {
     max-width: 1000px;
@@ -31,19 +37,166 @@ main {
     padding: 0 20px;
 }
 
+/* SEÇÕES */
+
 section {
     background-color: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    margin-bottom: 25px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
 }
 
 section h2 {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    font-size: 22px;
+    color: #111827;
 }
 
+/* FORMULÁRIO */
+
+#categoryForm {
+    display: grid;
+    grid-template-columns: 1fr 220px auto;
+    gap: 15px;
+    align-items: end;
+}
+
+#categoryForm div {
+    display: flex;
+    flex-direction: column;
+}
+
+#categoryForm label {
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#categoryForm input,
+#categoryForm select {
+    height: 42px;
+    padding: 0 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    font-size: 15px;
+    background-color: white;
+}
+
+#categoryForm input:focus,
+#categoryForm select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+/* BOTÃO CADASTRAR */
+
+#categoryForm button {
+    height: 42px;
+    padding: 0 18px;
+    border: none;
+    border-radius: 7px;
+    background-color: #2563eb;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#categoryForm button:hover {
+    background-color: #1d4ed8;
+}
+
+/* LISTA DE CATEGORIAS */
+
 #categories {
-    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* CADA CATEGORIA */
+
+#categories > div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
     background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
     border-radius: 8px;
+}
+
+/* NOME DA CATEGORIA */
+
+#categories strong {
+    min-width: 200px;
+    color: #111827;
+}
+
+/* TIPO */
+
+#categories span {
+    flex: 1;
+    color: #6b7280;
+}
+
+/* BOTÕES DA LISTA */
+
+#categories button {
+    border: none;
+    border-radius: 6px;
+    padding: 8px 14px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/* BOTÃO EDITAR */
+
+#categories button:first-of-type {
+    background-color: #f59e0b;
+}
+
+#categories button:first-of-type:hover {
+    background-color: #d97706;
+}
+
+/* BOTÃO EXCLUIR */
+
+#categories button:last-of-type {
+    background-color: #dc2626;
+}
+
+#categories button:last-of-type:hover {
+    background-color: #b91c1c;
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 800px) {
+
+    #categoryForm {
+        grid-template-columns: 1fr;
+    }
+
+    #categoryForm button {
+        width: 100%;
+    }
+
+    #categories > div {
+        flex-wrap: wrap;
+    }
+
+    #categories strong {
+        min-width: auto;
+        width: 100%;
+    }
+
+    #categories span {
+        width: 100%;
+        flex: none;
+    }
 }

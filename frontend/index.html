@@ -1,42 +1,83 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
 
-```
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<title>FinanceControl</title>
+    <title>FinanceControl</title>
 
-<link rel="stylesheet" href="./css/style.css">
-```
-
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 
 <body>
 
-```
-<header>
-    <h1>FinanceControl</h1>
-    <p>Sistema de Controle Financeiro Pessoal</p>
-</header>
+    <header>
+        <h1>FinanceControl</h1>
+        <p>Sistema de Controle Financeiro Pessoal</p>
+    </header>
 
-<main>
-    <section>
-        <h2>Categorias</h2>
+    <main>
 
-        <div id="categories">
-            Carregando categorias...
-        </div>
-    </section>
-</main>
+        <section>
+            <h2>Nova categoria</h2>
 
-<script src="./js/app.js"></script>
-```
+            <form id="categoryForm">
+
+                <div>
+                    <label for="categoryName">
+                        Nome da categoria
+                    </label>
+
+                    <input
+                        type="text"
+                        id="categoryName"
+                        placeholder="Ex.: Investimentos"
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label for="categoryType">
+                        Tipo
+                    </label>
+
+                    <select id="categoryType" required>
+                        <option value="">
+                            Selecione o tipo
+                        </option>
+
+                        <option value="income">
+                            Receita
+                        </option>
+
+                        <option value="expense">
+                            Despesa
+                        </option>
+                    </select>
+                </div>
+
+                <button type="submit">
+                    Cadastrar categoria
+                </button>
+
+            </form>
+        </section>
+
+        <section>
+            <h2>Categorias</h2>
+
+            <div id="categories">
+                Carregando categorias...
+            </div>
+        </section>
+
+    </main>
+
+    <script src="./js/app.js"></script>
 
 </body>
 </html>
