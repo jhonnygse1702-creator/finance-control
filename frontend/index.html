@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -10,42 +12,115 @@
 
     <title>FinanceControl</title>
 
-    <link rel="stylesheet" href="./css/style.css">
+    <link
+        rel="stylesheet"
+        href="./css/style.css"
+    >
+
 </head>
 
 <body>
 
     <header>
+
         <h1>FinanceControl</h1>
-        <p>Sistema de Controle Financeiro Pessoal</p>
+
+        <p>
+            Sistema de Controle Financeiro Pessoal
+        </p>
+
     </header>
 
     <main>
 
-        <section>
-            <h2>Nova categoria</h2>
+        <!-- ================================
+             DASHBOARD
+        ================================= -->
 
-            <form id="categoryForm">
+        <section>
+
+            <h2>Resumo financeiro</h2>
+
+            <div id="dashboard">
 
                 <div>
-                    <label for="categoryName">
-                        Nome da categoria
+
+                    <label for="dashboardMonth">
+                        Mês
                     </label>
 
                     <input
-                        type="text"
-                        id="categoryName"
-                        placeholder="Ex.: Investimentos"
-                        required
+                        type="month"
+                        id="dashboardMonth"
                     >
+
                 </div>
 
+                <div id="dashboardCards">
+
+                    <div>
+
+                        <span>
+                            Receitas
+                        </span>
+
+                        <strong id="dashboardIncome">
+                            R$ 0,00
+                        </strong>
+
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Despesas
+                        </span>
+
+                        <strong id="dashboardExpense">
+                            R$ 0,00
+                        </strong>
+
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Saldo
+                        </span>
+
+                        <strong id="dashboardBalance">
+                            R$ 0,00
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================================
+             NOVA TRANSAÇÃO
+        ================================= -->
+
+        <section>
+
+            <h2>Nova transação</h2>
+
+            <form id="transactionForm">
+
                 <div>
-                    <label for="categoryType">
+
+                    <label for="transactionType">
                         Tipo
                     </label>
 
-                    <select id="categoryType" required>
+                    <select
+                        id="transactionType"
+                        required
+                    >
+
                         <option value="">
                             Selecione o tipo
                         </option>
@@ -57,7 +132,148 @@
                         <option value="expense">
                             Despesa
                         </option>
+
                     </select>
+
+                </div>
+
+                <div>
+
+                    <label for="transactionCategory">
+                        Categoria
+                    </label>
+
+                    <select
+                        id="transactionCategory"
+                        required
+                    >
+
+                        <option value="">
+                            Selecione a categoria
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div>
+
+                    <label for="transactionDescription">
+                        Descrição
+                    </label>
+
+                    <input
+                        type="text"
+                        id="transactionDescription"
+                        placeholder="Ex.: Salário de setembro"
+                        required
+                    >
+
+                </div>
+
+                <div>
+
+                    <label for="transactionAmount">
+                        Valor
+                    </label>
+
+                    <input
+                        type="number"
+                        id="transactionAmount"
+                        placeholder="0,00"
+                        min="0.01"
+                        step="0.01"
+                        required
+                    >
+
+                </div>
+
+                <div>
+
+                    <label for="transactionDate">
+                        Data
+                    </label>
+
+                    <input
+                        type="date"
+                        id="transactionDate"
+                        required
+                    >
+
+                </div>
+
+                <div>
+
+                    <label for="transactionNotes">
+                        Observação
+                    </label>
+
+                    <input
+                        type="text"
+                        id="transactionNotes"
+                        placeholder="Opcional"
+                    >
+
+                </div>
+
+                <button type="submit">
+                    Cadastrar transação
+                </button>
+
+            </form>
+
+        </section>
+
+        <!-- ================================
+             NOVA CATEGORIA
+        ================================= -->
+
+        <section>
+
+            <h2>Nova categoria</h2>
+
+            <form id="categoryForm">
+
+                <div>
+
+                    <label for="categoryName">
+                        Nome da categoria
+                    </label>
+
+                    <input
+                        type="text"
+                        id="categoryName"
+                        placeholder="Ex.: Investimentos"
+                        required
+                    >
+
+                </div>
+
+                <div>
+
+                    <label for="categoryType">
+                        Tipo
+                    </label>
+
+                    <select
+                        id="categoryType"
+                        required
+                    >
+
+                        <option value="">
+                            Selecione o tipo
+                        </option>
+
+                        <option value="income">
+                            Receita
+                        </option>
+
+                        <option value="expense">
+                            Despesa
+                        </option>
+
+                    </select>
+
                 </div>
 
                 <button type="submit">
@@ -65,14 +281,63 @@
                 </button>
 
             </form>
+
         </section>
 
+        <!-- ================================
+             CATEGORIAS
+        ================================= -->
+
         <section>
+
             <h2>Categorias</h2>
 
             <div id="categories">
                 Carregando categorias...
             </div>
+
+        </section>
+
+        <!-- ================================
+             TRANSAÇÕES
+        ================================= -->
+
+        <section>
+
+            <h2>Transações</h2>
+
+            <div id="transactionSearch">
+
+                <label for="transactionSearchInput">
+                    Pesquisar transações
+                </label>
+
+                <input
+                    type="text"
+                    id="transactionSearchInput"
+                    placeholder="Digite uma palavra-chave..."
+                >
+
+                <button
+                    type="button"
+                    id="searchTransactionsButton"
+                >
+                    Pesquisar
+                </button>
+
+                <button
+                    type="button"
+                    id="clearTransactionSearchButton"
+                >
+                    Limpar pesquisa
+                </button>
+
+            </div>
+
+            <div id="transactions">
+                Nenhuma transação carregada.
+            </div>
+
         </section>
 
     </main>
@@ -80,4 +345,5 @@
     <script src="./js/app.js"></script>
 
 </body>
+
 </html>

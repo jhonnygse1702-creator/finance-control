@@ -1,6 +1,6 @@
 const db = require("../database/connection");
 
-function getSummary() {
+function getSummary(month) {
     return db
         .prepare(`
             SELECT
@@ -25,8 +25,14 @@ function getSummary() {
                 ) AS total_expense
 
             FROM transactions
+
+            WHERE transaction_date >= ?
+              AND transaction_date < date(?, '+1 month')
         `)
-        .get();
+        .get(
+            `${month}-01`,
+            `${month}-01`
+        );
 }
 
 module.exports = {

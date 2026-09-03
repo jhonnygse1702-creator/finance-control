@@ -1,7 +1,9 @@
 const dashboardService = require("../services/dashboardService");
 
 function getFinancialSummary(req, res) {
-    const summary = dashboardService.getFinancialSummary();
+    const { month } = req.query;
+
+    const summary = dashboardService.getFinancialSummary(month);
 
     res.json(summary);
 }
