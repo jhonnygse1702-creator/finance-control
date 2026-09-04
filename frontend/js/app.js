@@ -1,3 +1,6 @@
+const AUTH_API_URL =
+    "http://localhost:3000/api/auth";
+
 const CATEGORY_API_URL =
     "http://localhost:3000/api/categories";
 
@@ -7,7 +10,385 @@ const TRANSACTION_API_URL =
 const DASHBOARD_API_URL =
     "http://localhost:3000/api/dashboard";
 
+const TOKEN_STORAGE_KEY =
+    "financecontrol_token";
+
 let allTransactions = [];
+
+let allCategories = [];
+
+
+/* ================================
+   AUTENTICAÇÃO
+================================ */
+
+function getToken() {
+
+    return localStorage.getItem(
+        TOKEN_STORAGE_KEY
+    );
+}
+
+
+function saveToken(token) {
+
+    localStorage.setItem(
+        TOKEN_STORAGE_KEY,
+        token
+    );
+}
+
+
+function removeToken() {
+
+    localStorage.removeItem(
+        TOKEN_STORAGE_KEY
+    );
+}
+
+
+function showLoginScreen() {
+
+    const loginScreen =
+        document.getElementById(
+            "loginScreen"
+        );
+
+    const appContent =
+        document.getElementById(
+            "appContent"
+        );
+
+    if (loginScreen) {
+        loginScreen.classList.remove("hidden");
+    }
+
+    if (appContent) {
+        appContent.classList.add("hidden");
+    }
+}
+
+
+function showAppContent() {
+
+    const loginScreen =
+        document.getElementById(
+            "loginScreen"
+        );
+
+    const appContent =
+        document.getElementById(
+            "appContent"
+        );
+
+    if (loginScreen) {
+        loginScreen.classList.add("hidden");
+    }
+
+    if (appContent) {
+        appContent.classList.remove("hidden");
+    }
+}
+
+
+function handleUnauthorized() {
+
+    removeToken();
+
+    showLoginScreen();
+
+    const loginMessage =
+        document.getElementById(
+            "loginMessage"
+        );
+
+    if (loginMessage) {
+
+        loginMessage.textContent =
+            "Sua sessão expirou. Faça login novamente.";
+
+        loginMessage.style.color =
+            "red";
+    }
+}
+
+
+async function authenticatedFetch(
+    url,
+    options = {}
+) {
+
+    const token =
+        getToken();
+
+    const headers = {
+        ...(options.headers || {})
+    };
+
+    if (token) {
+
+        headers.Authorization =
+            `Bearer ${token}`;
+    }
+
+    const response =
+        await fetch(
+            url,
+            {
+                ...options,
+                headers
+            }
+        );
+
+    if (response.status === 401) {
+
+        handleUnauthorized();
+
+        throw new Error(
+            "Sua sessão expirou. Faça login novamente."
+        );
+    }
+
+    return response;
+}
+
+
+/* ================================
+   LOGIN
+================================ */
+
+async function login(event) {
+
+    event.preventDefault();
+
+    const emailInput =
+        document.getElementById(
+            "loginEmail"
+        );
+
+    const passwordInput =
+        document.getElementById(
+            "loginPassword"
+        );
+
+    const loginMessage =
+        document.getElementById(
+            "loginMessage"
+        );
+
+    if (
+        !emailInput ||
+        !passwordInput
+    ) {
+        return;
+    }
+
+    const email =
+        emailInput.value.trim();
+
+    const password =
+        passwordInput.value;
+
+    if (!email) {
+
+        if (loginMessage) {
+
+            loginMessage.textContent =
+                "Informe o e-mail.";
+
+            loginMessage.style.color =
+                "red";
+        }
+
+        return;
+    }
+
+    if (!password) {
+
+        if (loginMessage) {
+
+            loginMessage.textContent =
+                "Informe a senha.";
+
+            loginMessage.style.color =
+                "red";
+        }
+
+        return;
+    }
+
+    if (loginMessage) {
+
+        loginMessage.textContent =
+            "Entrando...";
+
+        loginMessage.style.color =
+            "";
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                `${AUTH_API_URL}/login`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        email,
+                        password
+                    })
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Não foi possível realizar o login."
+            );
+        }
+
+        if (!data.token) {
+
+            throw new Error(
+                "O servidor não retornou um token de autenticação."
+            );
+        }
+
+        saveToken(
+            data.token
+        );
+
+        if (loginMessage) {
+
+            loginMessage.textContent =
+                "";
+        }
+
+        emailInput.value = "";
+
+        passwordInput.value = "";
+
+        showAppContent();
+
+        await initializeAuthenticatedApp();
+
+    } catch (error) {
+
+        console.error(
+            "Erro no login:",
+            error
+        );
+
+        if (loginMessage) {
+
+            loginMessage.textContent =
+                error.message;
+
+            loginMessage.style.color =
+                "red";
+        }
+    }
+}
+
+
+function logout() {
+
+    removeToken();
+
+    allTransactions = [];
+
+    allCategories = [];
+
+    showLoginScreen();
+
+    const loginEmail =
+        document.getElementById(
+            "loginEmail"
+        );
+
+    const loginPassword =
+        document.getElementById(
+            "loginPassword"
+        );
+
+    const loginMessage =
+        document.getElementById(
+            "loginMessage"
+        );
+
+    if (loginEmail) {
+        loginEmail.value = "";
+    }
+
+    if (loginPassword) {
+        loginPassword.value = "";
+    }
+
+    if (loginMessage) {
+        loginMessage.textContent = "";
+    }
+
+    closeCategoriesPanel();
+}
+
+
+/* ================================
+   VALIDAR SESSÃO
+================================ */
+
+async function validateSession() {
+
+    const token =
+        getToken();
+
+    if (!token) {
+
+        showLoginScreen();
+
+        return false;
+    }
+
+    try {
+
+        const response =
+            await authenticatedFetch(
+                `${AUTH_API_URL}/me`
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Sessão inválida."
+            );
+        }
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            "Erro ao validar sessão:",
+            error
+        );
+
+        removeToken();
+
+        showLoginScreen();
+
+        return false;
+    }
+}
+
 
 /* ================================
    TRADUZIR TIPO DA CATEGORIA
@@ -16,15 +397,18 @@ let allTransactions = [];
 function translateCategoryType(type) {
 
     if (type === "income") {
+
         return "Receita";
     }
 
     if (type === "expense") {
+
         return "Despesa";
     }
 
     return type;
 }
+
 
 /* ================================
    DASHBOARD
@@ -41,6 +425,7 @@ function formatCurrency(value) {
     );
 }
 
+
 function getCurrentMonth() {
 
     const today =
@@ -56,6 +441,7 @@ function getCurrentMonth() {
 
     return `${year}-${month}`;
 }
+
 
 async function loadDashboard() {
 
@@ -101,7 +487,9 @@ async function loadDashboard() {
             `${DASHBOARD_API_URL}?month=${month}`;
 
         const response =
-            await fetch(url);
+            await authenticatedFetch(
+                url
+            );
 
         const data =
             await response.json();
@@ -136,6 +524,14 @@ async function loadDashboard() {
             error
         );
 
+        if (
+            error.message.includes(
+                "sessão"
+            )
+        ) {
+            return;
+        }
+
         incomeElement.textContent =
             "R$ 0,00";
 
@@ -149,8 +545,126 @@ async function loadDashboard() {
     }
 }
 
+
 /* ================================
-   CATEGORIAS
+   CATEGORIAS - RENDERIZAR
+================================ */
+
+function renderCategories(
+    categories
+) {
+
+    const categoriesContainer =
+        document.getElementById(
+            "categories"
+        );
+
+    if (!categoriesContainer) {
+        return;
+    }
+
+    if (categories.length === 0) {
+
+        categoriesContainer.innerHTML =
+            "<p>Nenhuma categoria encontrada.</p>";
+
+        return;
+    }
+
+    categoriesContainer.innerHTML =
+        "";
+
+    categories.forEach(
+        (category) => {
+
+            const categoryElement =
+                document.createElement(
+                    "div"
+                );
+
+            const categoryName =
+                document.createElement(
+                    "strong"
+                );
+
+            categoryName.textContent =
+                category.name;
+
+            const categoryType =
+                document.createElement(
+                    "span"
+                );
+
+            categoryType.textContent =
+                translateCategoryType(
+                    category.type
+                );
+
+            const editButton =
+                document.createElement(
+                    "button"
+                );
+
+            editButton.textContent =
+                "Editar";
+
+            editButton.addEventListener(
+                "click",
+                () => {
+
+                    editCategory(
+                        category.id,
+                        category.name,
+                        category.type
+                    );
+                }
+            );
+
+            const deleteButton =
+                document.createElement(
+                    "button"
+                );
+
+            deleteButton.textContent =
+                "Excluir";
+
+            deleteButton.addEventListener(
+                "click",
+                () => {
+
+                    deleteCategory(
+                        category.id,
+                        category.name
+                    );
+                }
+            );
+
+            categoryElement.appendChild(
+                categoryName
+            );
+
+            categoryElement.appendChild(
+                categoryType
+            );
+
+            categoryElement.appendChild(
+                editButton
+            );
+
+            categoryElement.appendChild(
+                deleteButton
+            );
+
+            categoriesContainer.appendChild(
+                categoryElement
+            );
+        }
+    );
+}
+
+
+/* ================================
+   CATEGORIAS - CARREGAR
 ================================ */
 
 async function loadCategories() {
@@ -165,120 +679,35 @@ async function loadCategories() {
             "transactionCategory"
         );
 
+    if (
+        !categoriesContainer ||
+        !transactionCategory
+    ) {
+        return;
+    }
+
     try {
 
         const response =
-            await fetch(
+            await authenticatedFetch(
                 CATEGORY_API_URL
             );
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Erro ao buscar categorias."
-            );
-        }
 
         const categories =
             await response.json();
 
-        if (categories.length === 0) {
+        if (!response.ok) {
 
-            categoriesContainer.innerHTML =
-                "<p>Nenhuma categoria cadastrada.</p>";
-
-        } else {
-
-            categoriesContainer.innerHTML =
-                "";
-
-            categories.forEach(
-                (category) => {
-
-                    const categoryElement =
-                        document.createElement(
-                            "div"
-                        );
-
-                    const categoryName =
-                        document.createElement(
-                            "strong"
-                        );
-
-                    categoryName.textContent =
-                        category.name;
-
-                    const categoryType =
-                        document.createElement(
-                            "span"
-                        );
-
-                    categoryType.textContent =
-                        translateCategoryType(
-                            category.type
-                        );
-
-                    const editButton =
-                        document.createElement(
-                            "button"
-                        );
-
-                    editButton.textContent =
-                        "Editar";
-
-                    editButton.addEventListener(
-                        "click",
-                        () => {
-
-                            editCategory(
-                                category.id,
-                                category.name,
-                                category.type
-                            );
-                        }
-                    );
-
-                    const deleteButton =
-                        document.createElement(
-                            "button"
-                        );
-
-                    deleteButton.textContent =
-                        "Excluir";
-
-                    deleteButton.addEventListener(
-                        "click",
-                        () => {
-
-                            deleteCategory(
-                                category.id,
-                                category.name
-                            );
-                        }
-                    );
-
-                    categoryElement.appendChild(
-                        categoryName
-                    );
-
-                    categoryElement.appendChild(
-                        categoryType
-                    );
-
-                    categoryElement.appendChild(
-                        editButton
-                    );
-
-                    categoryElement.appendChild(
-                        deleteButton
-                    );
-
-                    categoriesContainer.appendChild(
-                        categoryElement
-                    );
-                }
+            throw new Error(
+                categories.error ||
+                "Erro ao buscar categorias."
             );
         }
+
+        allCategories =
+            categories;
+
+        resetCategorySearch();
 
         transactionCategory.innerHTML = `
             <option value="">
@@ -311,7 +740,18 @@ async function loadCategories() {
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Erro ao carregar categorias:",
+            error
+        );
+
+        if (
+            error.message.includes(
+                "sessão"
+            )
+        ) {
+            return;
+        }
 
         categoriesContainer.innerHTML = `
             <p>
@@ -320,6 +760,7 @@ async function loadCategories() {
         `;
     }
 }
+
 
 /* ================================
    CADASTRAR CATEGORIA
@@ -339,16 +780,43 @@ async function createCategory(event) {
             "categoryType"
         );
 
+    if (
+        !nameInput ||
+        !typeInput
+    ) {
+        return;
+    }
+
     const name =
         nameInput.value.trim();
 
     const type =
         typeInput.value;
 
+    if (!name) {
+
+        alert(
+            "O nome da categoria é obrigatório."
+        );
+
+        return;
+    }
+
+    if (
+        !["income", "expense"].includes(type)
+    ) {
+
+        alert(
+            "Selecione um tipo válido."
+        );
+
+        return;
+    }
+
     try {
 
         const response =
-            await fetch(
+            await authenticatedFetch(
                 CATEGORY_API_URL,
                 {
                     method: "POST",
@@ -388,11 +856,23 @@ async function createCategory(event) {
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Erro ao cadastrar categoria:",
+            error
+        );
+
+        if (
+            error.message.includes(
+                "sessão"
+            )
+        ) {
+            return;
+        }
 
         alert(error.message);
     }
 }
+
 
 /* ================================
    EDITAR CATEGORIA
@@ -453,7 +933,7 @@ async function editCategory(
     try {
 
         const response =
-            await fetch(
+            await authenticatedFetch(
                 `${CATEGORY_API_URL}/${id}`,
                 {
                     method: "PUT",
@@ -495,11 +975,23 @@ async function editCategory(
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Erro ao atualizar categoria:",
+            error
+        );
+
+        if (
+            error.message.includes(
+                "sessão"
+            )
+        ) {
+            return;
+        }
 
         alert(error.message);
     }
 }
+
 
 /* ================================
    EXCLUIR CATEGORIA
@@ -522,7 +1014,7 @@ async function deleteCategory(
     try {
 
         const response =
-            await fetch(
+            await authenticatedFetch(
                 `${CATEGORY_API_URL}/${id}`,
                 {
                     method: "DELETE"
@@ -554,11 +1046,131 @@ async function deleteCategory(
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Erro ao excluir categoria:",
+            error
+        );
+
+        if (
+            error.message.includes(
+                "sessão"
+            )
+        ) {
+            return;
+        }
 
         alert(error.message);
     }
 }
+
+
+/* ================================
+   PESQUISA DE CATEGORIAS
+================================ */
+
+function searchCategories(
+    keyword
+) {
+
+    const normalizedKeyword =
+        String(keyword || "")
+            .toLowerCase();
+
+    if (!normalizedKeyword) {
+
+        renderCategories(
+            allCategories
+        );
+
+        return;
+    }
+
+    const filteredCategories =
+        allCategories.filter(
+            (category) => {
+
+                const name =
+                    String(
+                        category.name || ""
+                    ).toLowerCase();
+
+                return name.includes(
+                    normalizedKeyword
+                );
+            }
+        );
+
+    renderCategories(
+        filteredCategories
+    );
+}
+
+
+function resetCategorySearch() {
+
+    const categorySearchInput =
+        document.getElementById(
+            "categorySearchInput"
+        );
+
+    if (categorySearchInput) {
+
+        categorySearchInput.value = "";
+    }
+
+    renderCategories(
+        allCategories
+    );
+}
+
+
+/* ================================
+   PAINEL DE CATEGORIAS (MODAL)
+================================ */
+
+function openCategoriesPanel() {
+
+    const categoriesPanelOverlay =
+        document.getElementById(
+            "categoriesPanelOverlay"
+        );
+
+    const categorySearchInput =
+        document.getElementById(
+            "categorySearchInput"
+        );
+
+    if (categoriesPanelOverlay) {
+
+        categoriesPanelOverlay.classList.remove(
+            "hidden"
+        );
+    }
+
+    resetCategorySearch();
+
+    if (categorySearchInput) {
+
+        categorySearchInput.focus();
+    }
+}
+
+
+function closeCategoriesPanel() {
+
+    const categoriesPanelOverlay =
+        document.getElementById(
+            "categoriesPanelOverlay"
+        );
+
+    if (categoriesPanelOverlay) {
+
+        categoriesPanelOverlay.classList.add(
+            "hidden"
+        );
+    }
+}
+
 
 /* ================================
    CADASTRAR TRANSAÇÃO
@@ -597,6 +1209,17 @@ async function createTransaction(event) {
         document.getElementById(
             "transactionNotes"
         );
+
+    if (
+        !typeInput ||
+        !categoryInput ||
+        !descriptionInput ||
+        !amountInput ||
+        !dateInput ||
+        !notesInput
+    ) {
+        return;
+    }
 
     const type =
         typeInput.value;
@@ -688,7 +1311,7 @@ async function createTransaction(event) {
     try {
 
         const response =
-            await fetch(
+            await authenticatedFetch(
                 TRANSACTION_API_URL,
                 {
                     method: "POST",
@@ -699,7 +1322,6 @@ async function createTransaction(event) {
                     },
 
                     body: JSON.stringify({
-                        userId: 1,
                         categoryId,
                         description,
                         amount,
@@ -745,11 +1367,23 @@ async function createTransaction(event) {
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Erro ao cadastrar transação:",
+            error
+        );
+
+        if (
+            error.message.includes(
+                "sessão"
+            )
+        ) {
+            return;
+        }
 
         alert(error.message);
     }
 }
+
 
 /* ================================
    EDITAR TRANSAÇÃO
@@ -846,7 +1480,7 @@ async function editTransaction(
     try {
 
         const response =
-            await fetch(
+            await authenticatedFetch(
                 `${TRANSACTION_API_URL}/${transaction.id}`,
                 {
                     method: "PUT",
@@ -897,11 +1531,23 @@ async function editTransaction(
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Erro ao atualizar transação:",
+            error
+        );
+
+        if (
+            error.message.includes(
+                "sessão"
+            )
+        ) {
+            return;
+        }
 
         alert(error.message);
     }
 }
+
 
 /* ================================
    EXCLUIR TRANSAÇÃO
@@ -924,7 +1570,7 @@ async function deleteTransaction(
     try {
 
         const response =
-            await fetch(
+            await authenticatedFetch(
                 `${TRANSACTION_API_URL}/${id}`,
                 {
                     method: "DELETE"
@@ -954,11 +1600,23 @@ async function deleteTransaction(
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Erro ao excluir transação:",
+            error
+        );
+
+        if (
+            error.message.includes(
+                "sessão"
+            )
+        ) {
+            return;
+        }
 
         alert(error.message);
     }
 }
+
 
 /* ================================
    RENDERIZAR TRANSAÇÕES
@@ -1077,6 +1735,7 @@ function renderTransactions(
     );
 }
 
+
 /* ================================
    LISTAR TRANSAÇÕES
 ================================ */
@@ -1086,19 +1745,20 @@ async function loadTransactions() {
     try {
 
         const response =
-            await fetch(
+            await authenticatedFetch(
                 TRANSACTION_API_URL
             );
+
+        const transactions =
+            await response.json();
 
         if (!response.ok) {
 
             throw new Error(
+                transactions.error ||
                 "Erro ao buscar transações."
             );
         }
-
-        const transactions =
-            await response.json();
 
         allTransactions =
             transactions;
@@ -1109,7 +1769,18 @@ async function loadTransactions() {
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Erro ao carregar transações:",
+            error
+        );
+
+        if (
+            error.message.includes(
+                "sessão"
+            )
+        ) {
+            return;
+        }
 
         const transactionsContainer =
             document.getElementById(
@@ -1126,6 +1797,7 @@ async function loadTransactions() {
         }
     }
 }
+
 
 /* ================================
    PESQUISA DE TRANSAÇÕES
@@ -1168,6 +1840,7 @@ function searchTransactions(
     );
 }
 
+
 /* ================================
    LIMPAR PESQUISA
 ================================ */
@@ -1189,13 +1862,78 @@ function resetTransactionSearch() {
     );
 }
 
+
+/* ================================
+   INICIALIZAR SISTEMA AUTENTICADO
+================================ */
+
+async function initializeAuthenticatedApp() {
+
+    const dashboardMonth =
+        document.getElementById(
+            "dashboardMonth"
+        );
+
+    if (dashboardMonth) {
+
+        if (!dashboardMonth.value) {
+
+            dashboardMonth.value =
+                getCurrentMonth();
+        }
+    }
+
+    await loadCategories();
+
+    await loadTransactions();
+
+    await loadDashboard();
+}
+
+
 /* ================================
    INICIALIZAÇÃO
 ================================ */
 
 document.addEventListener(
     "DOMContentLoaded",
-    () => {
+    async () => {
+
+        /* ----------------------------
+           FORMULÁRIO DE LOGIN
+        ----------------------------- */
+
+        const loginForm =
+            document.getElementById(
+                "loginForm"
+            );
+
+        if (loginForm) {
+
+            loginForm.addEventListener(
+                "submit",
+                login
+            );
+        }
+
+
+        /* ----------------------------
+           BOTÃO SAIR
+        ----------------------------- */
+
+        const logoutButton =
+            document.getElementById(
+                "logoutButton"
+            );
+
+        if (logoutButton) {
+
+            logoutButton.addEventListener(
+                "click",
+                logout
+            );
+        }
+
 
         /* ----------------------------
            FORMULÁRIO DE CATEGORIA
@@ -1214,6 +1952,89 @@ document.addEventListener(
             );
         }
 
+
+        /* ----------------------------
+           PAINEL DE CATEGORIAS
+        ----------------------------- */
+
+        const openCategoriesPanelButton =
+            document.getElementById(
+                "openCategoriesPanelButton"
+            );
+
+        const closeCategoriesPanelButton =
+            document.getElementById(
+                "closeCategoriesPanelButton"
+            );
+
+        const categoriesPanelOverlay =
+            document.getElementById(
+                "categoriesPanelOverlay"
+            );
+
+        const categorySearchInput =
+            document.getElementById(
+                "categorySearchInput"
+            );
+
+        if (openCategoriesPanelButton) {
+
+            openCategoriesPanelButton.addEventListener(
+                "click",
+                openCategoriesPanel
+            );
+        }
+
+        if (closeCategoriesPanelButton) {
+
+            closeCategoriesPanelButton.addEventListener(
+                "click",
+                closeCategoriesPanel
+            );
+        }
+
+        if (categoriesPanelOverlay) {
+
+            categoriesPanelOverlay.addEventListener(
+                "click",
+                (event) => {
+
+                    if (
+                        event.target ===
+                        categoriesPanelOverlay
+                    ) {
+
+                        closeCategoriesPanel();
+                    }
+                }
+            );
+        }
+
+        if (categorySearchInput) {
+
+            categorySearchInput.addEventListener(
+                "input",
+                (event) => {
+
+                    searchCategories(
+                        event.target.value
+                    );
+                }
+            );
+        }
+
+        document.addEventListener(
+            "keydown",
+            (event) => {
+
+                if (event.key === "Escape") {
+
+                    closeCategoriesPanel();
+                }
+            }
+        );
+
+
         /* ----------------------------
            FORMULÁRIO DE TRANSAÇÃO
         ----------------------------- */
@@ -1230,6 +2051,7 @@ document.addEventListener(
                 createTransaction
             );
         }
+
 
         /* ----------------------------
            DASHBOARD
@@ -1251,8 +2073,9 @@ document.addEventListener(
             );
         }
 
+
         /* ----------------------------
-           PESQUISA
+           PESQUISA DE TRANSAÇÕES
         ----------------------------- */
 
         const transactionSearch =
@@ -1309,14 +2132,23 @@ document.addEventListener(
             );
         }
 
+
         /* ----------------------------
-           CARREGAMENTO INICIAL
+           VERIFICAR SESSÃO
         ----------------------------- */
 
-        loadCategories();
+        const authenticated =
+            await validateSession();
 
-        loadTransactions();
+        if (authenticated) {
 
-        loadDashboard();
+            showAppContent();
+
+            await initializeAuthenticatedApp();
+
+        } else {
+
+            showLoginScreen();
+        }
     }
 );

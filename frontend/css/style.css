@@ -1,46 +1,361 @@
+/* ================================
+   RESET
+================================ */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+
+/* ================================
+   BODY
+================================ */
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f3f6fa;
+    font-family:
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef2f7,
+            #f8fafc
+        );
+
     color: #1f2937;
+
     min-height: 100vh;
 }
 
+
 /* ================================
-   HEADER
+   TELA DE LOGIN
+================================ */
+
+#loginScreen {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #111827 0%,
+            #1f2937 50%,
+            #374151 100%
+        );
+}
+
+
+#loginContainer {
+    width: 100%;
+    max-width: 420px;
+
+    padding: 42px 38px;
+
+    background-color: #ffffff;
+
+    border-radius: 18px;
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.15);
+
+    box-shadow:
+        0 25px 60px
+        rgba(0, 0, 0, 0.28);
+
+    text-align: center;
+}
+
+
+#loginContainer h1 {
+    margin-bottom: 8px;
+
+    color: #111827;
+
+    font-size: 31px;
+    font-weight: 800;
+
+    letter-spacing: -0.8px;
+}
+
+
+#loginContainer > p:first-of-type {
+    margin-bottom: 30px;
+
+    color: #6b7280;
+
+    font-size: 14px;
+}
+
+
+#loginContainer h2 {
+    margin-bottom: 22px;
+
+    color: #374151;
+
+    font-size: 21px;
+    font-weight: 700;
+}
+
+
+#loginForm {
+    display: flex;
+    flex-direction: column;
+
+    gap: 17px;
+
+    text-align: left;
+}
+
+
+#loginForm div {
+    display: flex;
+    flex-direction: column;
+}
+
+
+#loginForm label {
+    margin-bottom: 7px;
+
+    color: #374151;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+#loginForm input {
+    width: 100%;
+
+    height: 46px;
+
+    padding: 0 14px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 10px;
+
+    background-color: #ffffff;
+
+    color: #111827;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s,
+        background-color 0.2s;
+}
+
+
+#loginForm input::placeholder {
+    color: #9ca3af;
+}
+
+
+#loginForm input:hover {
+    border-color: #9ca3af;
+}
+
+
+#loginForm input:focus {
+    outline: none;
+
+    border-color: #2563eb;
+
+    background-color: #ffffff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(37, 99, 235, 0.12);
+}
+
+
+#loginForm button {
+    width: 100%;
+
+    height: 47px;
+
+    margin-top: 6px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #1d4ed8
+        );
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 14px
+        rgba(37, 99, 235, 0.22);
+
+    transition:
+        transform 0.15s,
+        box-shadow 0.2s,
+        filter 0.2s;
+}
+
+
+#loginForm button:hover {
+    filter: brightness(1.05);
+
+    box-shadow:
+        0 8px 18px
+        rgba(37, 99, 235, 0.28);
+
+    transform: translateY(-1px);
+}
+
+
+#loginForm button:active {
+    transform: translateY(1px);
+}
+
+
+#loginMessage {
+    min-height: 20px;
+
+    margin-top: 17px;
+
+    color: #dc2626;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    text-align: center;
+}
+
+
+/* ================================
+   HEADER DO SISTEMA
 ================================ */
 
 header {
-    background: linear-gradient(
-        135deg,
-        #111827,
-        #1f2937
-    );
+    position: relative;
 
-    color: white;
-    padding: 36px 20px;
-    text-align: center;
+    background:
+        linear-gradient(
+            135deg,
+            #111827,
+            #1f2937
+        );
+
+    color: #ffffff;
+
+    padding: 28px 70px 28px 30px;
+
+    text-align: left;
 
     box-shadow:
-        0 4px 14px rgba(0, 0, 0, 0.14);
+        0 4px 16px
+        rgba(0, 0, 0, 0.15);
 }
 
+
 header h1 {
-    font-size: 32px;
-    margin-bottom: 8px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
+    margin-bottom: 5px;
+
+    font-size: 30px;
+    font-weight: 800;
+
+    letter-spacing: -0.6px;
 }
+
 
 header p {
     color: #d1d5db;
-    font-size: 15px;
+
+    font-size: 14px;
 }
+
+
+/* ================================
+   BOTÃO SAIR
+================================ */
+
+#logoutButton {
+    position: absolute;
+
+    top: 50%;
+
+    right: 30px;
+
+    transform: translateY(-50%);
+
+    height: 38px;
+
+    padding: 0 17px;
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.22);
+
+    border-radius: 9px;
+
+    background-color:
+        rgba(255, 255, 255, 0.08);
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s,
+        border-color 0.2s,
+        transform 0.15s,
+        box-shadow 0.2s;
+}
+
+
+#logoutButton:hover {
+    background-color:
+        rgba(255, 255, 255, 0.17);
+
+    border-color:
+        rgba(255, 255, 255, 0.4);
+
+    box-shadow:
+        0 4px 10px
+        rgba(0, 0, 0, 0.18);
+}
+
+
+#logoutButton:active {
+    transform:
+        translateY(
+            calc(-50% + 1px)
+        );
+}
+
 
 /* ================================
    CONTEÚDO PRINCIPAL
@@ -48,33 +363,54 @@ header p {
 
 main {
     width: 100%;
+
     max-width: 1100px;
-    margin: 35px auto;
+
+    margin: 30px auto;
+
     padding: 0 20px;
 }
+
 
 section {
     background-color: #ffffff;
 
-    padding: 30px;
-    margin-bottom: 24px;
+    padding: 26px;
+
+    margin-bottom: 20px;
 
     border-radius: 14px;
+
     border: 1px solid #e5e7eb;
 
     box-shadow:
-        0 5px 18px rgba(15, 23, 42, 0.06);
+        0 4px 16px
+        rgba(15, 23, 42, 0.055);
 }
+
 
 section h2 {
-    margin-bottom: 24px;
-
-    font-size: 21px;
-    font-weight: 700;
+    margin-bottom: 20px;
 
     color: #111827;
-    letter-spacing: -0.2px;
+
+    font-size: 20px;
+    font-weight: 750;
+
+    letter-spacing: -0.25px;
 }
+
+
+/* ================================
+   CAMPOS GERAIS
+================================ */
+
+input,
+select,
+button {
+    font-family: inherit;
+}
+
 
 /* ================================
    DASHBOARD
@@ -82,36 +418,45 @@ section h2 {
 
 #dashboard {
     display: flex;
+
     flex-direction: column;
-    gap: 24px;
+
+    gap: 20px;
 }
+
 
 #dashboard > div:first-child {
     display: flex;
+
     flex-direction: column;
 
-    width: 220px;
+    width: 210px;
 }
+
 
 #dashboard > div:first-child label {
-    margin-bottom: 8px;
-
-    font-size: 13px;
-    font-weight: 700;
+    margin-bottom: 7px;
 
     color: #4b5563;
+
+    font-size: 12px;
+    font-weight: 700;
 }
+
 
 #dashboardMonth {
     width: 100%;
-    height: 44px;
+
+    height: 43px;
 
     padding: 0 13px;
 
     border: 1px solid #d1d5db;
+
     border-radius: 9px;
 
     background-color: #ffffff;
+
     color: #1f2937;
 
     font-size: 14px;
@@ -123,14 +468,26 @@ section h2 {
         box-shadow 0.2s;
 }
 
+
+#dashboardMonth:hover {
+    border-color: #9ca3af;
+}
+
+
 #dashboardMonth:focus {
     outline: none;
 
     border-color: #2563eb;
 
     box-shadow:
-        0 0 0 3px rgba(37, 99, 235, 0.12);
+        0 0 0 3px
+        rgba(37, 99, 235, 0.12);
 }
+
+
+/* ================================
+   CARDS DO DASHBOARD
+================================ */
 
 #dashboardCards {
     display: grid;
@@ -138,53 +495,112 @@ section h2 {
     grid-template-columns:
         repeat(3, minmax(0, 1fr));
 
-    gap: 18px;
+    gap: 16px;
 }
+
 
 #dashboardCards > div {
     display: flex;
+
     flex-direction: column;
+
     justify-content: center;
 
-    min-height: 125px;
+    min-height: 118px;
 
-    padding: 22px;
+    padding: 20px;
 
     border: 1px solid #e5e7eb;
+
     border-radius: 12px;
 
     background-color: #f8fafc;
 
     box-shadow:
-        0 3px 10px rgba(0, 0, 0, 0.04);
+        0 3px 10px
+        rgba(0, 0, 0, 0.035);
 
     transition:
         transform 0.2s,
         box-shadow 0.2s;
 }
 
+
 #dashboardCards > div:hover {
     transform: translateY(-2px);
 
     box-shadow:
-        0 7px 18px rgba(0, 0, 0, 0.08);
+        0 7px 18px
+        rgba(0, 0, 0, 0.075);
 }
+
+
+/* Receitas */
+
+#dashboardCards > div:nth-child(1) {
+    background-color: #f0fdf4;
+
+    border-color: #bbf7d0;
+
+    border-left: 4px solid #16a34a;
+}
+
+#dashboardCards > div:nth-child(1) strong {
+    color: #15803d;
+}
+
+
+/* Despesas */
+
+#dashboardCards > div:nth-child(2) {
+    background-color: #fef2f2;
+
+    border-color: #fecaca;
+
+    border-left: 4px solid #dc2626;
+}
+
+#dashboardCards > div:nth-child(2) strong {
+    color: #b91c1c;
+}
+
+
+/* Saldo */
+
+#dashboardCards > div:nth-child(3) {
+    background-color: #eff6ff;
+
+    border-color: #bfdbfe;
+
+    border-left: 4px solid #2563eb;
+}
+
+#dashboardCards > div:nth-child(3) strong {
+    color: #1d4ed8;
+}
+
 
 #dashboardCards span {
-    margin-bottom: 10px;
-
-    font-size: 13px;
-    font-weight: 700;
+    margin-bottom: 8px;
 
     color: #6b7280;
-}
 
-#dashboardCards strong {
-    font-size: 25px;
+    font-size: 12px;
     font-weight: 700;
 
-    color: #111827;
+    text-transform: uppercase;
+
+    letter-spacing: 0.3px;
 }
+
+
+#dashboardCards strong {
+    color: #111827;
+
+    font-size: 24px;
+    font-weight: 800;
+}
+
 
 /* ================================
    FORMULÁRIO DE CATEGORIAS
@@ -203,31 +619,58 @@ section h2 {
     align-items: end;
 }
 
+/* Cada campo agora é uma "caixa" própria, separada visualmente */
 #categoryForm div {
     display: flex;
+
     flex-direction: column;
+
+    padding: 14px 16px;
+
+    background-color: #f8fafc;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 10px;
+
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
 }
+
+#categoryForm div:focus-within {
+    border-color: #93c5fd;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(37, 99, 235, 0.08);
+}
+
 
 #categoryForm label {
-    margin-bottom: 8px;
-
-    font-size: 13px;
-    font-weight: 700;
+    margin-bottom: 7px;
 
     color: #4b5563;
+
+    font-size: 12px;
+    font-weight: 700;
 }
+
 
 #categoryForm input,
 #categoryForm select {
     width: 100%;
-    height: 44px;
+
+    height: 43px;
 
     padding: 0 13px;
 
     border: 1px solid #d1d5db;
+
     border-radius: 9px;
 
     background-color: #ffffff;
+
     color: #1f2937;
 
     font-size: 14px;
@@ -237,9 +680,17 @@ section h2 {
         box-shadow 0.2s;
 }
 
+
 #categoryForm input::placeholder {
     color: #9ca3af;
 }
+
+
+#categoryForm input:hover,
+#categoryForm select:hover {
+    border-color: #9ca3af;
+}
+
 
 #categoryForm input:focus,
 #categoryForm select:focus {
@@ -248,19 +699,92 @@ section h2 {
     border-color: #2563eb;
 
     box-shadow:
-        0 0 0 3px rgba(37, 99, 235, 0.12);
+        0 0 0 3px
+        rgba(37, 99, 235, 0.12);
 }
 
-#categoryForm button {
-    height: 44px;
 
-    padding: 0 22px;
+/* ================================
+   BOTÃO CADASTRAR CATEGORIA
+================================ */
+
+#categoryForm button {
+    height: 43px;
+
+    padding: 0 20px;
 
     border: none;
+
     border-radius: 9px;
 
-    background-color: #2563eb;
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #1d4ed8
+        );
+
     color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 4px 10px
+        rgba(37, 99, 235, 0.18);
+
+    transition:
+        transform 0.15s,
+        box-shadow 0.2s,
+        filter 0.2s;
+
+    /* alinhar com as outras "caixas" que ganharam padding */
+    align-self: center;
+}
+
+
+#categoryForm button:hover {
+    filter: brightness(1.05);
+
+    box-shadow:
+        0 6px 14px
+        rgba(37, 99, 235, 0.24);
+
+    transform: translateY(-1px);
+}
+
+
+#categoryForm button:active {
+    transform: translateY(1px);
+}
+
+
+/* ================================
+   BOTÃO "PESQUISAR CATEGORIA"
+   (abre o painel de categorias,
+   que fica oculto por padrão)
+================================ */
+
+#openCategoriesPanelButton {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    height: 42px;
+
+    padding: 0 18px;
+
+    border: 1px solid #2563eb;
+
+    border-radius: 9px;
+
+    background-color: #ffffff;
+
+    color: #2563eb;
 
     font-size: 13px;
     font-weight: 700;
@@ -269,46 +793,208 @@ section h2 {
 
     transition:
         background-color 0.2s,
-        transform 0.15s,
-        box-shadow 0.2s;
+        color 0.2s,
+        box-shadow 0.2s,
+        transform 0.15s;
 }
 
-#categoryForm button:hover {
-    background-color: #1d4ed8;
+
+#openCategoriesPanelButton:hover {
+    background-color: #2563eb;
+
+    color: #ffffff;
 
     box-shadow:
-        0 4px 10px rgba(37, 99, 235, 0.22);
+        0 4px 10px
+        rgba(37, 99, 235, 0.2);
 }
 
-#categoryForm button:active {
+
+#openCategoriesPanelButton:active {
     transform: translateY(1px);
 }
 
+
 /* ================================
-   CATEGORIAS
+   CATEGORIAS CADASTRADAS
+   (lista fica escondida por padrão;
+   aparece dentro do painel de busca)
 ================================ */
+
+/* Utilitário genérico de ocultar,
+   pronto para o JS aplicar/remover */
+.hidden {
+    display: none !important;
+}
+
+
+/* Painel/overlay de pesquisa de categorias.
+   Comece com a classe .hidden no HTML e
+   remova-a via JS ao clicar em
+   #openCategoriesPanelButton */
+#categoriesPanelOverlay {
+    position: fixed;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    background-color:
+        rgba(17, 24, 39, 0.5);
+
+    z-index: 100;
+}
+
+
+#categoriesPanel {
+    width: 100%;
+
+    max-width: 520px;
+
+    max-height: 80vh;
+
+    overflow-y: auto;
+
+    padding: 26px;
+
+    background-color: #ffffff;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 25px 60px
+        rgba(0, 0, 0, 0.3);
+}
+
+
+#categoriesPanel h2 {
+    margin-bottom: 18px;
+
+    color: #111827;
+
+    font-size: 19px;
+    font-weight: 750;
+}
+
+
+#categorySearchInput {
+    width: 100%;
+
+    height: 42px;
+
+    margin-bottom: 16px;
+
+    padding: 0 13px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 9px;
+
+    background-color: #ffffff;
+
+    color: #1f2937;
+
+    font-size: 14px;
+
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
+}
+
+
+#categorySearchInput::placeholder {
+    color: #9ca3af;
+}
+
+
+#categorySearchInput:focus {
+    outline: none;
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(37, 99, 235, 0.12);
+}
+
+
+#closeCategoriesPanelButton {
+    width: 100%;
+
+    height: 42px;
+
+    margin-top: 16px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 9px;
+
+    background-color: #ffffff;
+
+    color: #4b5563;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s,
+        background-color 0.2s,
+        color 0.2s;
+}
+
+
+#closeCategoriesPanelButton:hover {
+    border-color: #9ca3af;
+
+    background-color: #f3f4f6;
+
+    color: #111827;
+}
+
 
 #categories {
     display: flex;
+
     flex-direction: column;
 
-    gap: 10px;
+    gap: 7px;
 }
 
+
+/*
+   Linha compacta de categoria
+*/
+
 #categories > div {
-    display: flex;
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        150px
+        auto
+        auto;
+
     align-items: center;
 
-    gap: 14px;
+    gap: 10px;
 
-    min-height: 58px;
+    min-height: 46px;
 
-    padding: 11px 15px;
+    padding: 7px 11px;
 
     background-color: #f8fafc;
 
     border: 1px solid #e5e7eb;
-    border-radius: 10px;
+
+    border-radius: 8px;
 
     transition:
         background-color 0.2s,
@@ -316,102 +1002,159 @@ section h2 {
         box-shadow 0.2s;
 }
 
+
 #categories > div:hover {
     background-color: #ffffff;
 
     border-color: #d1d5db;
 
     box-shadow:
-        0 3px 10px rgba(0, 0, 0, 0.05);
+        0 3px 9px
+        rgba(0, 0, 0, 0.045);
 }
 
-#categories strong {
-    flex: 1;
 
-    min-width: 180px;
+/* Nome da categoria */
+
+#categories strong {
+    min-width: 0;
+
+    overflow: hidden;
 
     color: #111827;
 
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
 }
+
+
+/*
+   O span deixa de ser utilizado
+   visualmente na lista de categorias.
+*/
 
 #categories span {
-    min-width: 90px;
-
-    padding: 6px 11px;
-
-    border-radius: 20px;
-
-    text-align: center;
-
-    font-size: 11px;
-    font-weight: 700;
-
-    color: #4b5563;
-
-    background-color: #e5e7eb;
+    display: none;
 }
 
+
+/* ================================
+   VALOR DA CATEGORIA
+================================ */
+
+.category-value {
+    color: #111827;
+
+    font-size: 13px;
+
+    font-weight: 750;
+
+    text-align: right;
+
+    white-space: nowrap;
+}
+
+
+/* ================================
+   BOTÕES DAS CATEGORIAS
+================================ */
+
 #categories button {
-    border: none;
-    border-radius: 8px;
+    height: 32px;
 
-    padding: 8px 14px;
+    min-width: 65px;
 
-    color: #ffffff;
+    padding: 0 10px;
 
-    font-size: 12px;
+    border-radius: 7px;
+
+    font-size: 11px;
     font-weight: 700;
 
     cursor: pointer;
 
     transition:
         background-color 0.2s,
+        border-color 0.2s,
+        color 0.2s,
         transform 0.15s,
         box-shadow 0.2s;
 }
+
 
 #categories button:active {
     transform: translateY(1px);
 }
 
+
+/* Editar */
+
 #categories button:first-of-type {
-    background-color: #f59e0b;
+    border: 1px solid #f59e0b;
+
+    background-color: #fffaf0;
+
+    color: #b45309;
 }
+
 
 #categories button:first-of-type:hover {
-    background-color: #d97706;
+    background-color: #f59e0b;
+
+    color: #ffffff;
 
     box-shadow:
-        0 3px 8px rgba(217, 119, 6, 0.2);
+        0 3px 8px
+        rgba(245, 158, 11, 0.2);
 }
+
+
+/* Excluir */
 
 #categories button:last-of-type {
-    background-color: #dc2626;
+    border: 1px solid #fecaca;
+
+    background-color: #fef2f2;
+
+    color: #dc2626;
 }
+
 
 #categories button:last-of-type:hover {
-    background-color: #b91c1c;
+    background-color: #dc2626;
+
+    border-color: #dc2626;
+
+    color: #ffffff;
 
     box-shadow:
-        0 3px 8px rgba(185, 28, 28, 0.2);
+        0 3px 8px
+        rgba(220, 38, 38, 0.2);
 }
 
+
+/* Nenhuma categoria */
+
 #categories > p {
-    padding: 20px;
+    padding: 17px;
 
     border: 1px dashed #d1d5db;
+
     border-radius: 9px;
-
-    text-align: center;
-
-    color: #6b7280;
 
     background-color: #f8fafc;
 
-    font-size: 14px;
+    color: #6b7280;
+
+    font-size: 13px;
+
+    text-align: center;
 }
+
 
 /* ================================
    FORMULÁRIO DE TRANSAÇÕES
@@ -423,34 +1166,61 @@ section h2 {
     grid-template-columns:
         repeat(2, minmax(0, 1fr));
 
-    gap: 17px;
+    gap: 16px;
 }
 
+/* Cada campo agora é uma "caixa" própria, separada visualmente */
 #transactionForm div {
     display: flex;
+
     flex-direction: column;
+
+    padding: 14px 16px;
+
+    background-color: #f8fafc;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 10px;
+
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
 }
+
+#transactionForm div:focus-within {
+    border-color: #93c5fd;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(37, 99, 235, 0.08);
+}
+
 
 #transactionForm label {
-    margin-bottom: 8px;
-
-    font-size: 13px;
-    font-weight: 700;
+    margin-bottom: 7px;
 
     color: #4b5563;
+
+    font-size: 12px;
+    font-weight: 700;
 }
+
 
 #transactionForm input,
 #transactionForm select {
     width: 100%;
+
     height: 44px;
 
     padding: 0 13px;
 
     border: 1px solid #d1d5db;
+
     border-radius: 9px;
 
     background-color: #ffffff;
+
     color: #1f2937;
 
     font-size: 14px;
@@ -460,9 +1230,17 @@ section h2 {
         box-shadow 0.2s;
 }
 
+
 #transactionForm input::placeholder {
     color: #9ca3af;
 }
+
+
+#transactionForm input:hover,
+#transactionForm select:hover {
+    border-color: #9ca3af;
+}
+
 
 #transactionForm input:focus,
 #transactionForm select:focus {
@@ -471,20 +1249,61 @@ section h2 {
     border-color: #2563eb;
 
     box-shadow:
-        0 0 0 3px rgba(37, 99, 235, 0.12);
+        0 0 0 3px
+        rgba(37, 99, 235, 0.12);
 }
+
+
+/* ================================
+   SELECTS
+================================ */
+
+#transactionForm select,
+#categoryForm select,
+#dashboardMonth {
+    appearance: auto;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+#transactionForm select option,
+#categoryForm select option,
+#dashboardMonth option {
+    padding: 10px;
+
+    color: #1f2937;
+
+    background-color: #ffffff;
+
+    font-size: 14px;
+}
+
+
+/* ================================
+   BOTÃO TRANSAÇÃO
+================================ */
 
 #transactionForm button {
     grid-column: 1 / -1;
 
-    height: 46px;
+    height: 45px;
 
-    margin-top: 4px;
+    margin-top: 3px;
 
     border: none;
+
     border-radius: 9px;
 
-    background-color: #2563eb;
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #1d4ed8
+        );
+
     color: #ffffff;
 
     font-size: 14px;
@@ -492,22 +1311,32 @@ section h2 {
 
     cursor: pointer;
 
+    box-shadow:
+        0 4px 11px
+        rgba(37, 99, 235, 0.18);
+
     transition:
-        background-color 0.2s,
         transform 0.15s,
-        box-shadow 0.2s;
+        box-shadow 0.2s,
+        filter 0.2s;
 }
+
 
 #transactionForm button:hover {
-    background-color: #1d4ed8;
+    filter: brightness(1.05);
 
     box-shadow:
-        0 5px 12px rgba(37, 99, 235, 0.22);
+        0 6px 14px
+        rgba(37, 99, 235, 0.24);
+
+    transform: translateY(-1px);
 }
+
 
 #transactionForm button:active {
     transform: translateY(1px);
 }
+
 
 /* ================================
    PESQUISA DE TRANSAÇÕES
@@ -523,36 +1352,41 @@ section h2 {
 
     align-items: end;
 
-    gap: 10px;
+    gap: 9px;
 
-    margin-bottom: 22px;
+    margin-bottom: 18px;
 
-    padding: 18px;
+    padding: 15px;
 
     background-color: #f8fafc;
 
     border: 1px solid #e5e7eb;
-    border-radius: 11px;
+
+    border-radius: 10px;
 }
+
 
 #transactionSearch label {
     grid-column: 1 / -1;
 
-    margin-bottom: -2px;
+    margin-bottom: -1px;
 
     color: #374151;
 
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
 }
 
+
 #transactionSearchInput {
     width: 100%;
-    height: 44px;
 
-    padding: 0 14px;
+    height: 42px;
+
+    padding: 0 13px;
 
     border: 1px solid #d1d5db;
+
     border-radius: 9px;
 
     background-color: #ffffff;
@@ -566,9 +1400,11 @@ section h2 {
         box-shadow 0.2s;
 }
 
+
 #transactionSearchInput::placeholder {
     color: #9ca3af;
 }
+
 
 #transactionSearchInput:focus {
     outline: none;
@@ -576,159 +1412,18 @@ section h2 {
     border-color: #2563eb;
 
     box-shadow:
-        0 0 0 3px rgba(37, 99, 235, 0.12);
+        0 0 0 3px
+        rgba(37, 99, 235, 0.12);
 }
+
 
 #searchTransactionsButton,
 #clearTransactionSearchButton {
-    height: 44px;
+    height: 42px;
 
-    padding: 0 17px;
+    padding: 0 16px;
 
     border-radius: 9px;
-
-    font-size: 13px;
-    font-weight: 700;
-
-    cursor: pointer;
-
-    transition:
-        background-color 0.2s,
-        border-color 0.2s,
-        color 0.2s,
-        transform 0.15s,
-        box-shadow 0.2s;
-}
-
-#searchTransactionsButton {
-    border: 1px solid #2563eb;
-
-    background-color: #2563eb;
-    color: #ffffff;
-}
-
-#searchTransactionsButton:hover {
-    background-color: #1d4ed8;
-
-    box-shadow:
-        0 4px 10px rgba(37, 99, 235, 0.2);
-}
-
-#clearTransactionSearchButton {
-    border: 1px solid #d1d5db;
-
-    background-color: #ffffff;
-    color: #4b5563;
-}
-
-#clearTransactionSearchButton:hover {
-    border-color: #9ca3af;
-
-    background-color: #f3f4f6;
-
-    color: #111827;
-}
-
-#searchTransactionsButton:active,
-#clearTransactionSearchButton:active {
-    transform: translateY(1px);
-}
-
-/* ================================
-   LISTA DE TRANSAÇÕES
-================================ */
-
-#transactions {
-    display: flex;
-    flex-direction: column;
-
-    gap: 10px;
-}
-
-/* Cada transação */
-
-#transactions > div {
-    display: grid;
-
-    grid-template-columns:
-        minmax(0, 1fr)
-        160px
-        auto
-        auto;
-
-    align-items: center;
-
-    gap: 14px;
-
-    min-height: 66px;
-
-    padding: 12px 15px;
-
-    background-color: #ffffff;
-
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-
-    box-shadow:
-        0 2px 7px rgba(15, 23, 42, 0.04);
-
-    transition:
-        transform 0.18s,
-        border-color 0.18s,
-        box-shadow 0.18s,
-        background-color 0.18s;
-}
-
-#transactions > div:hover {
-    transform: translateY(-1px);
-
-    background-color: #fdfefe;
-
-    border-color: #d1d5db;
-
-    box-shadow:
-        0 5px 14px rgba(15, 23, 42, 0.08);
-}
-
-/* Descrição */
-
-#transactions > div strong:first-child {
-    min-width: 0;
-
-    overflow: hidden;
-
-    color: #111827;
-
-    font-size: 14px;
-    font-weight: 700;
-
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-/* Valor */
-
-#transactions > div strong:nth-child(2) {
-    text-align: right;
-
-    color: #111827;
-
-    font-size: 15px;
-    font-weight: 700;
-
-    white-space: nowrap;
-}
-
-/* Botões */
-
-#transactions > div button {
-    min-width: 76px;
-
-    height: 36px;
-
-    padding: 0 13px;
-
-    border-radius: 8px;
 
     font-size: 12px;
     font-weight: 700;
@@ -743,6 +1438,167 @@ section h2 {
         box-shadow 0.2s;
 }
 
+
+#searchTransactionsButton {
+    border: 1px solid #2563eb;
+
+    background-color: #2563eb;
+
+    color: #ffffff;
+}
+
+
+#searchTransactionsButton:hover {
+    background-color: #1d4ed8;
+
+    box-shadow:
+        0 4px 10px
+        rgba(37, 99, 235, 0.2);
+}
+
+
+#clearTransactionSearchButton {
+    border: 1px solid #d1d5db;
+
+    background-color: #ffffff;
+
+    color: #4b5563;
+}
+
+
+#clearTransactionSearchButton:hover {
+    border-color: #9ca3af;
+
+    background-color: #f3f4f6;
+
+    color: #111827;
+}
+
+
+#searchTransactionsButton:active,
+#clearTransactionSearchButton:active {
+    transform: translateY(1px);
+}
+
+
+/* ================================
+   LISTA DE TRANSAÇÕES
+================================ */
+
+#transactions {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+
+#transactions > div {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        150px
+        auto
+        auto;
+
+    align-items: center;
+
+    gap: 12px;
+
+    min-height: 60px;
+
+    padding: 10px 13px;
+
+    background-color: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 9px;
+
+    box-shadow:
+        0 2px 7px
+        rgba(15, 23, 42, 0.035);
+
+    transition:
+        transform 0.18s,
+        border-color 0.18s,
+        box-shadow 0.18s,
+        background-color 0.18s;
+}
+
+
+#transactions > div:hover {
+    transform: translateY(-1px);
+
+    background-color: #fdfefe;
+
+    border-color: #d1d5db;
+
+    box-shadow:
+        0 5px 14px
+        rgba(15, 23, 42, 0.075);
+}
+
+
+/* Descrição */
+
+#transactions > div strong:first-child {
+    min-width: 0;
+
+    overflow: hidden;
+
+    color: #111827;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* Valor */
+
+#transactions > div strong:nth-child(2) {
+    color: #111827;
+
+    font-size: 14px;
+    font-weight: 750;
+
+    text-align: right;
+
+    white-space: nowrap;
+}
+
+
+/* Botões */
+
+#transactions > div button {
+    min-width: 70px;
+
+    height: 34px;
+
+    padding: 0 11px;
+
+    border-radius: 7px;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s,
+        border-color 0.2s,
+        color 0.2s,
+        transform 0.15s,
+        box-shadow 0.2s;
+}
+
+
 /* Editar */
 
 #transactions > div button:first-of-type {
@@ -753,14 +1609,17 @@ section h2 {
     color: #b45309;
 }
 
+
 #transactions > div button:first-of-type:hover {
     background-color: #f59e0b;
 
     color: #ffffff;
 
     box-shadow:
-        0 4px 9px rgba(245, 158, 11, 0.22);
+        0 4px 9px
+        rgba(245, 158, 11, 0.22);
 }
+
 
 /* Excluir */
 
@@ -772,6 +1631,7 @@ section h2 {
     color: #dc2626;
 }
 
+
 #transactions > div button:last-of-type:hover {
     background-color: #dc2626;
 
@@ -780,29 +1640,34 @@ section h2 {
     color: #ffffff;
 
     box-shadow:
-        0 4px 9px rgba(220, 38, 38, 0.22);
+        0 4px 9px
+        rgba(220, 38, 38, 0.22);
 }
+
 
 #transactions > div button:active {
     transform: translateY(1px);
 }
 
-/* Mensagem quando não existem transações */
+
+/* Nenhuma transação */
 
 #transactions > p {
-    padding: 24px;
+    padding: 20px;
 
     border: 1px dashed #d1d5db;
+
     border-radius: 10px;
 
     background-color: #f8fafc;
 
-    text-align: center;
-
     color: #6b7280;
 
-    font-size: 14px;
+    font-size: 13px;
+
+    text-align: center;
 }
+
 
 /* ================================
    RESPONSIVIDADE
@@ -810,72 +1675,89 @@ section h2 {
 
 @media (max-width: 800px) {
 
+    header {
+        padding: 25px 75px 25px 20px;
+    }
+
+
+    header h1 {
+        font-size: 27px;
+    }
+
+
+    #logoutButton {
+        right: 20px;
+    }
+
+
     #categoryForm {
         grid-template-columns: 1fr;
     }
 
+
     #transactionForm {
         grid-template-columns: 1fr;
     }
+
 
     #categoryForm button,
     #transactionForm button {
         width: 100%;
     }
 
+
     #dashboardCards {
         grid-template-columns: 1fr;
     }
+
 
     #dashboard > div:first-child {
         width: 100%;
     }
 
+
     #categories > div {
-        flex-wrap: wrap;
+        grid-template-columns:
+            minmax(0, 1fr)
+            auto
+            auto;
 
-        padding: 14px;
+        gap: 8px;
     }
 
-    #categories strong {
-        width: 100%;
-        min-width: 100%;
+
+    .category-value {
+        text-align: right;
     }
 
-    #categories span {
-        min-width: 100px;
-    }
-
-    /* Pesquisa */
 
     #transactionSearch {
         grid-template-columns: 1fr;
     }
 
+
     #transactionSearch label {
         grid-column: auto;
     }
+
 
     #searchTransactionsButton,
     #clearTransactionSearchButton {
         width: 100%;
     }
 
-    /* Transações */
 
     #transactions > div {
         grid-template-columns:
             minmax(0, 1fr)
             auto;
-
-        gap: 10px;
-
-        padding: 14px;
     }
+
 
     #transactions > div strong:first-child {
         grid-column: 1;
     }
+
 
     #transactions > div strong:nth-child(2) {
         grid-column: 2;
@@ -883,87 +1765,159 @@ section h2 {
         text-align: right;
     }
 
+
     #transactions > div button:first-of-type {
         grid-column: 1;
     }
 
+
     #transactions > div button:last-of-type {
         grid-column: 2;
     }
+
 
     #transactions > div button {
         width: 100%;
     }
 }
 
+
+/* ================================
+   CELULAR
+================================ */
+
 @media (max-width: 500px) {
 
-    header {
-        padding: 28px 15px;
+    #loginScreen {
+        padding: 15px;
     }
 
-    header h1 {
+
+    #loginContainer {
+        padding: 32px 23px;
+
+        border-radius: 15px;
+    }
+
+
+    #loginContainer h1 {
         font-size: 27px;
     }
 
-    header p {
-        font-size: 14px;
+
+    header {
+        padding:
+            23px
+            80px
+            23px
+            15px;
     }
 
+
+    header h1 {
+        font-size: 24px;
+    }
+
+
+    header p {
+        font-size: 13px;
+    }
+
+
+    #logoutButton {
+        right: 15px;
+
+        padding: 0 13px;
+    }
+
+
     main {
-        margin: 25px auto;
+        margin: 22px auto;
 
         padding: 0 12px;
     }
 
-    section {
-        padding: 20px;
 
-        border-radius: 12px;
+    section {
+        padding: 19px;
+
+        border-radius: 11px;
     }
+
 
     section h2 {
-        font-size: 19px;
+        font-size: 18px;
 
-        margin-bottom: 20px;
+        margin-bottom: 18px;
     }
+
 
     #dashboardCards {
-        gap: 12px;
+        gap: 10px;
     }
+
 
     #dashboardCards > div {
-        min-height: 110px;
+        min-height: 100px;
 
-        padding: 18px;
+        padding: 17px;
     }
+
 
     #dashboardCards strong {
-        font-size: 22px;
+        font-size: 21px;
     }
+
+
+    #categoryForm div,
+    #transactionForm div {
+        padding: 12px 14px;
+    }
+
 
     #categories > div {
-        gap: 8px;
+        grid-template-columns:
+            minmax(0, 1fr)
+            auto;
+
+        gap: 7px;
+
+        padding: 8px;
     }
 
-    #categories button {
-        flex: 1;
+
+    .category-value {
+        text-align: right;
     }
+
+
+    #categories button {
+        width: 100%;
+    }
+
 
     #transactionForm input,
     #transactionForm select {
-        height: 46px;
+        height: 45px;
     }
 
-    #transactionSearch {
-        padding: 15px;
+
+    #categoriesPanel {
+        padding: 20px;
     }
+
+
+    #transactionSearch {
+        padding: 13px;
+    }
+
 
     #transactions > div {
         grid-template-columns: 1fr;
 
-        gap: 9px;
+        gap: 8px;
     }
+
 
     #transactions > div strong:first-child,
     #transactions > div strong:nth-child(2),
@@ -974,9 +1928,11 @@ section h2 {
         text-align: left;
     }
 
+
     #transactions > div strong:nth-child(2) {
-        font-size: 16px;
+        font-size: 15px;
     }
+
 
     #transactions > div button {
         width: 100%;
